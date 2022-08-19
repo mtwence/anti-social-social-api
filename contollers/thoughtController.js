@@ -9,22 +9,26 @@ const getThought = (req, res) => {
 
 //   Get all thoughts 
 const getTotalThoughts = (req, res) => {
-  Thoughts.find({}, (err, thoughts) => {
-    if (thoughts) {
+    Thoughts.find({})
+    .populate("reactions")
+    .select("-__v")
+    .sort({ _id: -1 })
+    .then((thoughts) => {
+      console.log(thoughts);
       res.status(200).json(thoughts);
-    } else {
+    })
+    .catch((err) => {
       res.status(500).json(err);
-    }
-  });
+    });
 };
 
 // Create a new thought 
 const createThought = (req, res) => {
   Thoughts.create(req.body)
-    .then((_id) => {
+    .then(({_id}) => {
       return User.findOneAndUpdate(
-        { _id: req.body.userId },
-        { $push: { thoughts: _id } },
+        { _id: req.body._id },
+        { $push: { thoughts: thought._id } },
         { new: true }
       );
     })
