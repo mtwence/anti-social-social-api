@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/anti-social-social-api", {
+const { connect, connection } = require('mongoose');
+
+connect('mongodb://localhost:27017/anti-social-social-db', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-module.exports = mongoose.connection;
+module.exports = connection;

@@ -1,15 +1,15 @@
-const { Thoughts, User } = require("../models");
+const { Thought, User } = require("../models");
 
 // Get a single thought by id 
 const getThought = (req, res) => {
-    Thoughts.findOne({ _id: req.params._id })
+    Thought.findOne({ _id: req.params._id })
       .then((thought) => res.json(thought))
       .catch((err) => res.status(500).json(err));
   };
 
 //   Get all thoughts 
 const getTotalThoughts = (req, res) => {
-    Thoughts.find({})
+    Thought.find({})
     .populate("reactions")
     .select("-__v")
     .sort({ _id: -1 })
@@ -24,7 +24,7 @@ const getTotalThoughts = (req, res) => {
 
 // Create a new thought 
 const createThought = (req, res) => {
-  Thoughts.create(req.body)
+  Thought.create(req.body)
     .then((_id) => {
       return User.findOneAndUpdate(
         { _id: req.body._id },
@@ -47,7 +47,7 @@ const createThought = (req, res) => {
 
 // Delete a thought by id and pull from user
 const deleteThought = (req, res) => {
-  Thoughts.findOneAndDelete({ _id: req.params._id }).then((thought) => {
+  Thought.findOneAndDelete({ _id: req.params._id }).then((thought) => {
     if (!thought) {
       res.status(404).json({ message: "There is no thought with this id" });
     }
@@ -71,7 +71,7 @@ const deleteThought = (req, res) => {
 
 // Update thought by id 
 const updateThought = (req, res) => {
-  Thoughts.findOneAndUpdate(
+  Thought.findOneAndUpdate(
     { _id: req.params._id },
     { $set: req.body },
     { runValidators: true, new: true }
@@ -92,7 +92,7 @@ const updateThought = (req, res) => {
 
 // Create a new reaction for to a thought 
 const createReaction = (req, res) => {
-  Thoughts.findOneAndUpdate(
+  Thought.findOneAndUpdate(
     { _id: req.params._id },
     {
       $push: {
@@ -115,7 +115,7 @@ const createReaction = (req, res) => {
 
 // Delete a reaction by id and pull from thought
 const deleteReaction = (req, res) => {
-  Thoughts.findOneAndUpdate(
+  Thought.findOneAndUpdate(
     { _id: req.params._id },
     { $pull: { reactions: { reactionId: req.params.reactionId } } },
     {

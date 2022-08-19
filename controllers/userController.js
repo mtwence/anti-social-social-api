@@ -1,4 +1,4 @@
-const { User, Thoughts } = require("../models");
+const { User, Thought } = require("../models");
 
 // Get a single user by id
 const getUser = (req, res) => {
