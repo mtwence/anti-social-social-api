@@ -25,7 +25,7 @@ const getTotalThoughts = (req, res) => {
 // Create a new thought 
 const createThought = (req, res) => {
   Thoughts.create(req.body)
-    .then(({_id}) => {
+    .then((_id) => {
       return User.findOneAndUpdate(
         { _id: req.body._id },
         { $push: { thoughts: thought._id } },
